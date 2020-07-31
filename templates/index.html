@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../static/css/index.css" />
+    <script src="../static/js/paper.js" type="text/javascript"></script>
+    <script src="../static/js/index.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="d-flex workspace">
+        <div class="board">
+          <canvas id="drawing-board" style="width: 100%;"></canvas>
+        </div>
+
+        <button class="btn btn-dark mb-2" id="clear">Clear</button>
+        <!-- <button class="btn btn-dark" id="predict">Predict</button> -->
+        <div id="input-display"></div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,28 @@
+.workspace{
+    flex-direction: column;
+    align-items: center;
+}
+
+.board{
+    width:80%;
+    margin: 18px;
+    border: 3px solid #808080;
+    border-radius: 8px;
+}
+
+#clear{
+    width:40%;
+    font-size: 1.2em;
+    font-family: 'Roboto', sans-serif;
+}
+
+#predict{
+    width:40%;
+    font-size: 1.2em;
+    font-family: 'Roboto', sans-serif;
+
+}
+
+canvas{
+    justify-content: center;
+}
