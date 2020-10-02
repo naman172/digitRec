@@ -6,8 +6,7 @@ Created on Thu Jul 25 08:45:18 2020
 """
 import tensorflow as tf
 from models import ConvNeuralNet
-from tensorflow.examples.tutorials.mnist import input_data
-
+input_data = tf.keras.datasets.mnist
 MODEL_PATH = "model/best_acc.ckpt"
 
 

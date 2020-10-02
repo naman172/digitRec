@@ -8,6 +8,7 @@ window.onload = function () {
   tool.onMouseDown = function (event) {
     path = new paper.Path();
     path.strokeColor = "black";
+    path.strokeWidth = 10;
     path.add(event.point);
   };
 

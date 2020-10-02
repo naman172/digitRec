@@ -7,12 +7,15 @@ Created on Thu Jul 23 23:55:58 2020
 from flask import Flask, render_template, request
 from models import ConvNeuralNet
 from train import MODEL_PATH
+from io import BytesIO
 import json
 import numpy as np
-import tensorflow as tf
+import base64, re
+import tensorflow.compat.v1 as tf
+from flask import request
 from PIL import Image, ImageChops
 
-
+tf.disable_v2_behavior()
 app = Flask(__name__)
 global_sess = None
 model = ConvNeuralNet()
@@ -21,9 +24,6 @@ model = ConvNeuralNet()
 def index():
     return render_template('index.html')
 
-
-# Recognition POST
-@app.route('/predict', methods=['POST'])
 def Execute():
     result = {"prediction":{}}
 
@@ -38,16 +38,14 @@ def Execute():
 
 
 def preprocess(img):
-
     width, height = img.size[:2]
     left, top, right, bottom = width, height, -1, -1
     imgpix = img.getdata()
-
+    
     for y in range(height):
         yoffset = y * width
         for x in range(width):
-            if imgpix[yoffset + x] < 255:
-
+            if imgpix[yoffset + x][3] < 255:
                 if x < left:
                     left = x
                 if y < top:
@@ -62,27 +60,37 @@ def preprocess(img):
 
     return ImageChops.offset(img, -shiftX, -shiftY)
 
-
-def predict(imgpath):
-    try:
-        img = Image.open(imgpath).convert('L')
-
-    except IOError:
-        print("image not found")
-        return None
+# Recognition POST
+@app.route('/predict', methods=['POST'])
+def predict():
+    base64_data = re.sub('^data:image/.+;base64,', '', request.data.decode('utf-8'))
+    byte_data = base64.b64decode(base64_data)
+    image_data = BytesIO(byte_data)
+    img = Image.open(image_data)
+    datas = img.getdata()
+    new_image_data = []
+    for item in datas:
+        # change all transparent pixels to white
+        if item == (0,0,0,0):
+            new_image_data.append((255,255,255,255))
+        else:
+            new_image_data.append(item)
+            
+    # update image data
+    img.putdata(new_image_data)
+    img.save('capture.png', "PNG")
 
     # Image preprocessing
     img = preprocess(img)
-
-    img.thumbnail((28, 28))  
+    img.thumbnail((14, 14))
     img = np.array(img, dtype=np.float32)
-    img = 1 - np.array(img / 255)  
+    img = 1 - np.array(img / 255)
     img = img.reshape(1, 784)
 
     # predict
     res = global_sess.run(model.y_conv, feed_dict={model.x: img, model.y_: [[0.0] * 10], model.keep_prob: 1.0})[0]
-    return res
-
+    print(np.argmax(res))
+    return str(np.argmax(res))
 
 if __name__ == "__main__":
 

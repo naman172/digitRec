@@ -4,8 +4,10 @@
 Created on Thu Jul 25 13:25:18 2020
 @author: harshgupta
 """
-import tensorflow as tf
+# import tensorflow as tf
 # CNN
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior() 
 class ConvNeuralNet:
 
     # initialize computational graph
